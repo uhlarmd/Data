@@ -59,19 +59,9 @@
 		puts "median: #{median}"
 	end
 
-	def q1(array)
-	   arr = array.sort
-	   length = arr.size
-	   quart = (length/4.0).floor
-	   fraction = 1-((length/4.0)-quart)
-	   new_arr = arr[quart..-(quart + 1)]
-	   (fraction*(new_arr[0]+new_arr[-1]) + new_arr[1..-2].inject(:+))/(length/2.0)
-	end
-
-
-	def quartile(array,n=3)
-  	arr.sort!
-  	split = median_split arr
+	def quartile(array)
+  	array.sort!
+  	split = median_split array
   	case n
   	when 1
     	median split[0]
@@ -81,15 +71,49 @@
     	median split[1]
   end
 
-  def results
+	def mode2(array)
+		most = array.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+		array.max_by { |v| most[v] }
+	end
+
+	def q1(array)
+		if array.length % 2 == 0 
+			array_final = array[0..(array.length/2 - 1)]
+		else
+			array_final = array[0..(array.length/2)]
+		end	
+			
+		median(array_final)
+	end
+
+	def q3(array)
+		if array.length % 2 == 0
+			array_final = array[(array.length/2)...array.length]
+		else
+			array_final = array[(array.length/2 + 1)...array.length]
+		end
+			
+		median(array_final)
+		puts "q3: #{q3}"
+	end
+
+	def sigma(array)
+		variation = mean(array)
+		puts variation
+		array_dif = []
+		(0...array.length).each do |n|
+			array_dif.push((array[n] - variation)**2)
+		end	
+		mean(array_dif)
+	end
+
+end
+
 		puts "Number Summary:"
 		min(array)
 		max(array)
 		average(array)
 		median(array)  
 		mode(array)
-		quartile(array, n=3)
 		q1(array)
-		end
-	end
-end
+		q3(array)
